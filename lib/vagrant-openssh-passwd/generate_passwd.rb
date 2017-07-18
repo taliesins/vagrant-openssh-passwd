@@ -21,8 +21,7 @@ if ($passwd -eq $currentPasswd) {
   return $true
 }
 HERE
-        command_result = @machine.communicate.shell.powershell(command)
-        return command_result[:data][0][:stdout]
+        @machine.communicate.test(command, sudo: true)
       end
 
       def generate_passwd
@@ -52,8 +51,7 @@ if ($group -eq $currentGroup) {
   return $true
 }
 HERE
-        command_result = @machine.communicate.shell.powershell(command)
-        return command_result[:data][0][:stdout]
+        @machine.communicate.test(command, sudo: true)
       end 
         
       def generate_group
