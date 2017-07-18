@@ -13,6 +13,12 @@ module VagrantPlugins
       # Should group file be regenerated.
       attr_accessor :generate_group
 
+      attr_accessor :passwd_path
+      attr_accessor :mkpasswd_path
+      attr_accessor :group_path
+      attr_accessor :mkgroup_path
+      
+
       def initialize
         super
         @generate_passwd    = UNSET_VALUE
@@ -30,6 +36,10 @@ module VagrantPlugins
         # Null checks
         @generate_passwd           = nil if @generate_passwd == UNSET_VALUE || @generate_passwd == false
         @generate_group            = nil if @generate_group == UNSET_VALUE || @generate_group == false
+        @passwd_path               = nil if @passwd_path == UNSET_VALUE || @passwd_path == 'C:\\Program Files\\OpenSSH\bin\\mkpasswd.exe'
+        @mkpasswd_path             = nil if @group_path == UNSET_VALUE || @mkpasswd_path == 'C:\\Program Files\\OpenSSH\\etc\\passwd'
+        @group_path                = nil if @group_path == UNSET_VALUE || @group_path == 'C:\\Program Files\\OpenSSH\\etc\\passwd'
+        @mkgroup_path              = nil if @mkgroup_path == UNSET_VALUE || @mkgroup_path == 'C:\\Program Files\\OpenSSH\\etc\\passwd'        
       end
 
       # Validate configuration and return a hash of errors.
