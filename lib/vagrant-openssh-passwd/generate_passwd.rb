@@ -74,7 +74,7 @@ HERE
       # Expected to call the next middleware component in the chain if action should proceed.
       def call(env)
         @machine = env[:machine]
-        @config = @machine.config.vm.openssh_passwd
+        @config = @machine.config.openssh_passwd
 
         if @config && (@config.generate_passwd || @config.generate_group)
           if !@machine.communicate.ready?
