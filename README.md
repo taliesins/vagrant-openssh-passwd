@@ -15,7 +15,7 @@ A Vagrant Plugin that makes regenerates your passwd and group files for OpenSSH,
 In your Vagrantfile, add the following plugin and configure to your needs:
 
 ```ruby
-config.vm.provision :openssh_passwd do |openssh_passwd|
+config.vm :openssh_passwd do |openssh_passwd|
     openssh_passwd.generate_passwd=true
     openssh_passwd.generate_group=true
     openssh_passwd.passwd_path='C:\\Program Files\\OpenSSH\\etc\\passwd'

@@ -19,7 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.gui = true 
   end
 
-  config.vm.provision :openssh_passwd do |openssh_passwd|
+  config.vm :openssh_passwd do |openssh_passwd|
       openssh_passwd.generate_passwd=true
       openssh_passwd.generate_group=true
       openssh_passwd.passwd_path='C:\\Program Files\\OpenSSH\\etc\\passwd'

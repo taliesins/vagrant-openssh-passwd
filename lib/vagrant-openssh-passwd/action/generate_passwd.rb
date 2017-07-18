@@ -1,3 +1,5 @@
+require "log4r"
+
 module VagrantPlugins
   module OpenSshPasswd
     module Action
@@ -15,10 +17,7 @@ module VagrantPlugins
           @app = app
           @env = env
           @machine = env[:machine]
-
-          @machine.config.vm.provisioners.each do |prov|
-            @config = prov.config if prov.config.is_a?(VagrantPlugins::OpenSshPasswd::Config)
-          end
+          @config = @machine.config.vm.openssh_passwd
         end
 
         def needs_generate_passwd?
