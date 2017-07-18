@@ -7,12 +7,16 @@ module VagrantPlugins
         @logger = Log4r::Logger.new("vagrantplugins::opensshpasswd::generatepasswd")
         @logger.debug("Initialising generate open ssh passwd")
         @app = app
+        @machine = nil
+        @config = nil
       end
 
       def needs_generate_passwd?
         command = <<HERE
 $passwdPath = '#{@config.passwd_path}'
+if (!(Test-Path $passwdPath)) {throw "passwdPath does not exist - '$passwdPath'"}
 $mkpasswdPath = '#{@config.mkpasswd_path}'
+if (!(Test-Path $mkpasswdPath)) {throw "mkpasswdPath does not exist - '$mkpasswdPath'"}
 $passwd = &$mkpasswdPath -L
 $currentPasswd = Get-Content $passwdPath -Encoding Ascii
 if ($passwd -eq $currentPasswd) {
@@ -27,7 +31,9 @@ HERE
       def generate_passwd
         command = <<HERE
 $passwdPath = '#{@config.passwd_path}'
+if (!(Test-Path $passwdPath)) {throw "passwdPath does not exist - '$passwdPath'"}
 $mkpasswdPath = '#{@config.mkpasswd_path}'
+if (!(Test-Path $mkpasswdPath)) {throw "mkpasswdPath does not exist - '$mkpasswdPath'"}'
 $passwd = &$mkpasswdPath -L
 $passwd | Set-Content $passwdPath -Encoding Ascii
 HERE
@@ -35,6 +41,7 @@ HERE
         @machine.communicate.shell.powershell(command) do |type, data|
           if type == :stderr
             @machine.ui.error(data, prefix: false)
+            raise Vagrant::Errors::VagrantError.new, "vagrant-openssh-passwd: unable to generate_passwd"
           end
         end
       end
@@ -42,7 +49,9 @@ HERE
       def needs_generate_group?
         command = <<HERE
 $groupPath = '#{@config.group_path}'
+if (!(Test-Path $groupPath)) {throw "groupPath does not exist - '$groupPath'"}
 $mkgroupPath = '#{@config.mkgroup_path}'
+if (!(Test-Path $mkgroupPath)) {throw "mkgroupPath does not exist - '$mkgroupPath'"}
 $group = &$mkgroupPath -L
 $currentGroup = Get-Content $groupPath -Encoding Ascii
 if ($group -eq $currentGroup) {
@@ -57,13 +66,16 @@ HERE
       def generate_group
         command = <<HERE
 $groupPath = '#{@config.group_path}'
+if (!(Test-Path $groupPath)) {throw "groupPath does not exist - '$groupPath'"}
 $mkgroupPath = '#{@config.mkgroup_path}'
+if (!(Test-Path $mkgroupPath)) {throw "mkgroupPath does not exist - '$mkgroupPath'"}
 $group = &$groupPath -L
 $group | Set-Content $mkgroupPath -Encoding Ascii          
 HERE
         @machine.communicate.shell.powershell(command) do |type, data|
           if type == :stderr
             @machine.ui.error(data, prefix: false)
+            raise Vagrant::Errors::VagrantError.new, "vagrant-openssh-passwd: unable to generate_group"
           end
         end
       end          

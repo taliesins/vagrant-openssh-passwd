@@ -23,7 +23,7 @@ module VagrantPlugins
         super
         @generate_passwd    = UNSET_VALUE
         @generate_group     = UNSET_VALUE
-        @logger             = Log4r::Logger.new("vagrant::vagrant_openssh_passwd")
+        @logger             = Log4r::Logger.new("vagrantplugins::opensshpasswd::config")
       end
 
       # Final step of the Configuration lifecyle prior to
@@ -50,6 +50,30 @@ module VagrantPlugins
       # @return [Hash] Any errors or {} if no errors found
       def validate(machine)        
         errors = []
+
+        if  !(!!machine.config.openssh_passwd.generate_passwd  == machine.config.openssh_passwd.generate_passwd)
+          errors << "openssh_passwd.generate_passwd must be a boolean"
+        end
+
+        if  !(!!machine.config.openssh_passwd.generate_group  == machine.config.openssh_passwd.generate_group)
+          errors << "openssh_passwd.generate_group must be a boolean"
+        end
+
+        if !machine.config.openssh_passwd.passwd_path.kind_of?(String)
+          errors << "openssh_passwd.passwd_path must be a string"
+        end
+
+        if !machine.config.openssh_passwd.mkpasswd_path.kind_of?(String)
+          errors << "openssh_passwd.mkpasswd_path must be a string"
+        end     
+        
+        if !machine.config.openssh_passwd.group_path.kind_of?(String)
+          errors << "openssh_passwd.group_path must be a string"
+        end       
+        
+        if !machine.config.openssh_passwd.mkgroup_path.kind_of?(String)
+          errors << "openssh_passwd.mkgroup_path must be a string"
+        end             
 
         { "vagrant-openssh-passwd " => errors }
       end     
