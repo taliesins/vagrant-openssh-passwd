@@ -7,8 +7,6 @@ module VagrantPlugins
         @logger = Log4r::Logger.new("vagrantplugins::opensshpasswd::generatepasswd")
         @logger.debug("Initialising generate open ssh passwd")
         @app = app
-        #@machine = env[:machine]
-        #@config = @machine.config.vm.openssh_passwd
       end
 
       def needs_generate_passwd?
@@ -75,6 +73,9 @@ HERE
       # The middleware method that is invoked automatically by the Plugin ecosystem.
       # Expected to call the next middleware component in the chain if action should proceed.
       def call(env)
+        @machine = env[:machine]
+        @config = @machine.config.vm.openssh_passwd
+
         if @config && (@config.generate_passwd || @config.generate_group)
           if !@machine.communicate.ready?
             raise Vagrant::Errors::VagrantErrorr.new, "vagrant-openssh-passwd: communicator not ready!"
