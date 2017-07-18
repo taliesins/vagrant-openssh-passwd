@@ -33,7 +33,7 @@ HERE
 $passwdPath = '#{@config.passwd_path}'
 if (!(Test-Path $passwdPath)) {throw "passwdPath does not exist - '$passwdPath'"}
 $mkpasswdPath = '#{@config.mkpasswd_path}'
-if (!(Test-Path $mkpasswdPath)) {throw "mkpasswdPath does not exist - '$mkpasswdPath'"}'
+if (!(Test-Path $mkpasswdPath)) {throw "mkpasswdPath does not exist - '$mkpasswdPath'"}
 $passwd = &$mkpasswdPath -L
 $passwd | Set-Content $passwdPath -Encoding Ascii
 HERE

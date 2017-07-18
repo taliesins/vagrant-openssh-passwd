@@ -18,11 +18,14 @@ module VagrantPlugins
       attr_accessor :group_path
       attr_accessor :mkgroup_path
       
-
       def initialize
         super
         @generate_passwd    = UNSET_VALUE
         @generate_group     = UNSET_VALUE
+        @passwd_path        = UNSET_VALUE
+        @mkpasswd_path      = UNSET_VALUE
+        @group_path         = UNSET_VALUE
+        @mkgroup_path       = UNSET_VALUE
         @logger             = Log4r::Logger.new("vagrantplugins::opensshpasswd::config")
       end
 
@@ -34,12 +37,12 @@ module VagrantPlugins
         super
 
         # Null checks
-        @generate_passwd           = nil if @generate_passwd == UNSET_VALUE || @generate_passwd == false
-        @generate_group            = nil if @generate_group == UNSET_VALUE || @generate_group == false
-        @passwd_path               = nil if @passwd_path == UNSET_VALUE || @passwd_path == 'C:\\Program Files\\OpenSSH\\etc\\passwd'
-        @mkpasswd_path             = nil if @group_path == UNSET_VALUE || @mkpasswd_path == 'C:\\Program Files\\OpenSSH\bin\\mkpasswd.exe'
-        @group_path                = nil if @group_path == UNSET_VALUE || @group_path == 'C:\\Program Files\\OpenSSH\\etc\\group'
-        @mkgroup_path              = nil if @mkgroup_path == UNSET_VALUE || @mkgroup_path == 'C:\\Program Files\\OpenSSH\bin\\mkgroup.exe'
+        @generate_passwd           = false if @generate_passwd == UNSET_VALUE
+        @generate_group            = false if @generate_group == UNSET_VALUE
+        @passwd_path               = 'C:\\Program Files\\OpenSSH\\etc\\passwd' if @passwd_path == UNSET_VALUE || @passwd_path.empty?
+        @mkpasswd_path             = 'C:\\Program Files\\OpenSSH\bin\\mkpasswd.exe' if @mkpasswd_path == UNSET_VALUE || @mkpasswd_path.empty?
+        @group_path                = 'C:\\Program Files\\OpenSSH\\etc\\group' if @group_path == UNSET_VALUE || @group_path.empty?
+        @mkgroup_path              = 'C:\\Program Files\\OpenSSH\bin\\mkgroup.exe' if @mkgroup_path == UNSET_VALUE || @mkgroup_path.empty?
       end
 
       # Validate configuration and return a hash of errors.
