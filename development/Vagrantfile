@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$shell_script = <<SCRIPT
+  Write-Host "Hey, this happened after the restart!"
+SCRIPT
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "mfellows/windows2012r2"
+  config.vm.guest = :windows
+  config.vm.communicator = "winrm"
+  config.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+
+  config.vm.provider "virtualbox" do |v| 
+    v.gui = true 
+  end
+
+  config.vm.provision :openssh_passwd do |openssh_passwd|
+      openssh_passwd.generate_passwd=true
+      openssh_passwd.generate_group=true
+  end
+
+  # Confirm that this will run after the reload from the domain provisioner!
+  config.vm.provision "shell", inline: $shell_script  
+end
