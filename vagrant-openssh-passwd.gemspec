@@ -5,7 +5,7 @@ require 'vagrant-openssh-passwd/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "vagrant-openssh-passwd"
-  spec.version       = Vagrant::WindowsDomain::VERSION
+  spec.version       = Vagrant::OpenSshPasswd::VERSION
   spec.authors       = ["Taliesin Sisson"]
   spec.email         = ["taliesins@yahoo.com"]
   spec.summary       = "Generate passwd and group for OpenSSH for Vagrant before sync folder is run"
