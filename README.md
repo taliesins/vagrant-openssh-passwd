@@ -18,6 +18,10 @@ In your Vagrantfile, add the following plugin and configure to your needs:
 config.vm.provision :openssh_passwd do |openssh_passwd|
     openssh_passwd.generate_passwd=true
     openssh_passwd.generate_group=true
+    openssh_passwd.passwd_path='C:\\Program Files\\OpenSSH\\etc\\passwd'
+    openssh_passwd.mkpasswd_path='C:\\Program Files\\OpenSSH\bin\\mkpasswd.exe'
+    openssh_passwd.group_path='C:\\Program Files\\OpenSSH\\etc\\group'
+    openssh_passwd.mkgroup_path='C:\\Program Files\\OpenSSH\bin\\mkgroup.exe'
 end
 ```
 ## Example
