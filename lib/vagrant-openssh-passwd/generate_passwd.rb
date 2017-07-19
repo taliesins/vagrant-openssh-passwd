@@ -12,7 +12,6 @@ module VagrantPlugins
       end
 
       def needs_generate_passwd?
-        
         command = <<HERE
 $passwdPath = '#{@config.passwd_path}'
 if (!(Test-Path $passwdPath)) {throw "passwdPath does not exist - '$passwdPath'"}
