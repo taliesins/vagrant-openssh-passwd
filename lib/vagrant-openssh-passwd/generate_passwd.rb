@@ -86,6 +86,9 @@ HERE
         @machine = env[:machine]
         @config = @machine.config.openssh_passwd
 
+        # Continue the rest of the middleware actions
+        @app.call(env)
+
         if @config && (@config.generate_passwd || @config.generate_group)
           if !@machine.communicate.ready?
             raise Vagrant::Errors::VagrantErrorr.new, "vagrant-openssh-passwd: communicator not ready!"
@@ -103,9 +106,6 @@ HERE
         else
           @logger.debug("No open ssh configuration to regenerate")
         end
-
-        # Continue the rest of the middleware actions
-        @app.call(env)
       end
     end
   end
