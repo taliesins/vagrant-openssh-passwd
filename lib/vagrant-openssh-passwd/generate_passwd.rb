@@ -19,8 +19,8 @@ $mkpasswdPath = '#{@config.mkpasswd_path}'
 if (!(Test-Path $mkpasswdPath)) {throw "mkpasswdPath does not exist - '$mkpasswdPath'"}
 $currentPasswd = Get-Content $passwdPath -Encoding Ascii
 
-$localVagrantUserRegex = "^`(vagrant`).*U-$($env:COMPUTERNAME)\\vagrant.*"
-$localWithMachineNameVagrantUserRegex = "^$($env:COMPUTERNAME)\+vagrant.*U-$($env:COMPUTERNAME)\\vagrant.*"
+$localVagrantUserRegex = "^`(vagrant`).*U-$($env:COMPUTERNAME)\\\\vagrant.*"
+$localWithMachineNameVagrantUserRegex = "^$($env:COMPUTERNAME)\\+vagrant.*U-$($env:COMPUTERNAME)\\\\vagrant.*"
 $localVagrantUser = $currentPasswd -match $localVagrantUserRegex
 $localWithMachineNameVagrantUser = $currentPasswd -match $localWithMachineNameVagrantUserRegex
 $newlocalWithMachineNameVagrantUser = $localVagrantUser -replace "^vagrant(.*)`$", "$($env:COMPUTERNAME)+vagrant`$1"
@@ -46,8 +46,8 @@ if (![string]::join("`r`n", $currentPasswd).Contains($env:COMPUTERNAME)){
   $currentPasswd = &$mkpasswdPath -L
 }
 
-$localVagrantUserRegex = "^`(vagrant`).*U-$($env:COMPUTERNAME)\\vagrant.*"
-$localWithMachineNameVagrantUserRegex = "^$($env:COMPUTERNAME)\+vagrant.*U-$($env:COMPUTERNAME)\\vagrant.*"
+$localVagrantUserRegex = "^`(vagrant`).*U-$($env:COMPUTERNAME)\\\\vagrant.*"
+$localWithMachineNameVagrantUserRegex = "^$($env:COMPUTERNAME)\\+vagrant.*U-$($env:COMPUTERNAME)\\\\vagrant.*"
 $localVagrantUser = $currentPasswd -match $localVagrantUserRegex
 $localWithMachineNameVagrantUser = $currentPasswd -match $localWithMachineNameVagrantUserRegex
 $newlocalWithMachineNameVagrantUser = $localVagrantUser -replace "^vagrant(.*)`$", "$($env:COMPUTERNAME)+vagrant`$1"
