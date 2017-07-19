@@ -18,9 +18,15 @@ $passwdPath = '#{@config.passwd_path}'
 if (!(Test-Path $passwdPath)) {throw "passwdPath does not exist - '$passwdPath'"}
 $mkpasswdPath = '#{@config.mkpasswd_path}'
 if (!(Test-Path $mkpasswdPath)) {throw "mkpasswdPath does not exist - '$mkpasswdPath'"}
-$passwd = &$mkpasswdPath -L
 $currentPasswd = Get-Content $passwdPath -Encoding Ascii
-if ($passwd -eq $currentPasswd) {
+
+$localVagrantUserRegex = "^`(vagrant`).*U-$($env:COMPUTERNAME)\\vagrant.*"
+$localWithMachineNameVagrantUserRegex = "^$($env:COMPUTERNAME)\+vagrant.*U-$($env:COMPUTERNAME)\\vagrant.*"
+$localVagrantUser = $currentPasswd -match $localVagrantUserRegex
+$localWithMachineNameVagrantUser = $currentPasswd -match $localWithMachineNameVagrantUserRegex
+$newlocalWithMachineNameVagrantUser = $localVagrantUser -replace "^vagrant(.*)`$", "$($env:COMPUTERNAME)+vagrant`$1"
+
+if ($localWithMachineNameVagrantUser) {
   return $false
 } else {
   return $true
@@ -35,8 +41,19 @@ $passwdPath = '#{@config.passwd_path}'
 if (!(Test-Path $passwdPath)) {throw "passwdPath does not exist - '$passwdPath'"}
 $mkpasswdPath = '#{@config.mkpasswd_path}'
 if (!(Test-Path $mkpasswdPath)) {throw "mkpasswdPath does not exist - '$mkpasswdPath'"}
-$passwd = &$mkpasswdPath -L
-$passwd | Set-Content $passwdPath -Encoding Ascii
+$currentPasswd = Get-Content $passwdPath -Encoding Ascii
+
+$localVagrantUserRegex = "^`(vagrant`).*U-$($env:COMPUTERNAME)\\vagrant.*"
+$localWithMachineNameVagrantUserRegex = "^$($env:COMPUTERNAME)\+vagrant.*U-$($env:COMPUTERNAME)\\vagrant.*"
+$localVagrantUser = $currentPasswd -match $localVagrantUserRegex
+$localWithMachineNameVagrantUser = $currentPasswd -match $localWithMachineNameVagrantUserRegex
+$newlocalWithMachineNameVagrantUser = $localVagrantUser -replace "^vagrant(.*)`$", "$($env:COMPUTERNAME)+vagrant`$1"
+
+if (!$localWithMachineNameVagrantUser) {
+  $currentPasswd += $newlocalWithMachineNameVagrantUser
+  $currentPasswd | Set-Content $passwdPath -Encoding Ascii
+}
+
 HERE
 
         @machine.communicate.shell.powershell(command) do |type, data|
