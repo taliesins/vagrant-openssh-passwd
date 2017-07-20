@@ -4,7 +4,17 @@
 [![Coverage Status](https://coveralls.io/repos/taliesins/vagrant-openssh-passwd/badge.svg?branch=master)](https://coveralls.io/r/taliesins/vagrant-openssh-passwd?branch=master)
 [![Gem Version](https://badge.fury.io/rb/vagrant-openssh-passwd.svg)](http://badge.fury.io/rb/vagrant-openssh-passwd)
 
-A Vagrant Plugin that makes regenerates your passwd and group files for OpenSSH, so that you can use rsync when the machine is renamed.
+A Vagrant Plugin that makes regenerates your passwd and group files for OpenSSH on Windows, so that you can use machine name prefix when using ssh to the box. 
+
+## Why do I need this?
+
+TL;DR; You need this if you use Windows + OpenSSH + Rsync + join Active Directory.
+
+When spinning up a new Windows machine from a base box, it will have the name of the basebox. During the first boot, Vagrant will remote in and change the hostname. This is not a problem if you don't specify a machine prefix when connecting via SSH e.g. "vagrant" vs "webserver1+vagrant". 
+
+When you join a machine to Active Directory and wish to SSH into the box with local user credentials, you need to specify the hostname and username otherwise it defaults to looking the user up in Active Directory. During the first boot, your machine will not be connected to Active Directory and it will join Active Directory and then reboot. So for the first Rsync we will not be connected to Active Directory. This is not a problem if you do specify a machine prefix when connecting via SSH e.g. "webserver1+vagrant" vs "vagrant". But the base box that we cloned from is configured to only allow "basebox+vagrant" or "vagrant".
+
+To tackle this clash, if directly after changing the hostname we reconfigure OpenSsh with mkpasswd and mkgroup and then restart the service to apply the configuration, then "webserver1+vagrant" will be allowed to be used when it runs RSync folder sync.
 
 ## Installation
 
@@ -31,7 +41,7 @@ This is a great real-life example to get you on your way.
 
 ### Supported Environments
 
-Currently the plugin supports any Windows environment with Powershell 3+ installed (2008r2, 2012r2 should work nicely).
+Currently the plugin supports any Windows environment with Powershell 3+ installed (2008r2, 2012r2 should work nicely) and have OpenSSH installed on the basebox.
 
 ## Development
 
